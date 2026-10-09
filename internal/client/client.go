@@ -70,11 +70,16 @@ func New(baseURL, apiKey, userAgent string) *Client {
 		baseURL = DefaultBaseURL
 	}
 	return &Client{
-		baseURL:    strings.TrimRight(baseURL, "/"),
-		apiKey:     apiKey,
-		userAgent:  userAgent,
-		httpClient: &http.Client{Timeout: 30 * time.Second},
-		retryWait:  time.Second,
+		baseURL:   strings.TrimRight(baseURL, "/"),
+		apiKey:    apiKey,
+		userAgent: userAgent,
+		httpClient: &http.Client{
+			Timeout: 30 * time.Second,
+			// The API never redirects, and following one would send the X-API-KEY header to
+			// the redirect target: Go only strips standard credential headers across hosts.
+			CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse },
+		},
+		retryWait: time.Second,
 	}
 }
 

@@ -88,6 +88,29 @@ func TestKeyIsSentInHeaderOnly(t *testing.T) {
 	}
 }
 
+// The API never redirects. Following one would send the key, which Go forwards in custom
+// headers even across hosts, to wherever the redirect points.
+func TestRedirectsAreNotFollowed(t *testing.T) {
+	var leaked atomic.Bool
+	elsewhere := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("X-API-KEY") != "" {
+			leaked.Store(true)
+		}
+		w.Write([]byte(`{"ok":true,"result":{"zones":[]}}`))
+	}))
+	defer elsewhere.Close()
+	srv := httptest.NewServer(http.RedirectHandler(elsewhere.URL, http.StatusTemporaryRedirect))
+	defer srv.Close()
+
+	_, err := client.New(srv.URL+"/v1", "secret", "test").ListZones(context.Background())
+	if leaked.Load() {
+		t.Fatal("API key was sent to the redirect target")
+	}
+	if err == nil {
+		t.Fatal("expected an error for a redirect response")
+	}
+}
+
 func TestRetries(t *testing.T) {
 	var calls atomic.Int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
