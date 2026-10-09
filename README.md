@@ -48,5 +48,8 @@ make testacc   # provider tests against the real API: needs NANELO_API_KEY (+ NA
 make generate  # regenerate docs/ from the schema and examples/
 ```
 
+The repository rulesets protecting `main` and release tags are kept in [`.github/rulesets/`](.github/rulesets/),
+exported from GitHub. They are applied in the repository settings (Rules → Rulesets → Import), not by CI.
+
 Acceptance tests only create records named `tfacc-<random>` (plus one TXT record at the apex with a
 random value) and delete them afterwards, so they can run against a zone that is in use.
