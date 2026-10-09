@@ -11,8 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 
-	"github.com/bekk/terraform-provider-nanelo/internal/client"
-	"github.com/bekk/terraform-provider-nanelo/internal/fakenanelo"
+	"github.com/madshermansen/terraform-provider-nanelo/internal/client"
+	"github.com/madshermansen/terraform-provider-nanelo/internal/fakenanelo"
 )
 
 func recordConfig(name, typ, value, extra string) string {

@@ -13,8 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 
-	"github.com/bekk/terraform-provider-nanelo/internal/client"
-	"github.com/bekk/terraform-provider-nanelo/internal/fakenanelo"
+	"github.com/madshermansen/terraform-provider-nanelo/internal/client"
+	"github.com/madshermansen/terraform-provider-nanelo/internal/fakenanelo"
 )
 
 // testEnv runs provider tests against an in-memory fake API by default. With TF_ACC=1 and

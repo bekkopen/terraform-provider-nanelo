@@ -1,4 +1,4 @@
-module github.com/bekk/terraform-provider-nanelo
+module github.com/madshermansen/terraform-provider-nanelo
 
 go 1.27.0
 

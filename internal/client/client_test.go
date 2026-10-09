@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/bekk/terraform-provider-nanelo/internal/client"
-	"github.com/bekk/terraform-provider-nanelo/internal/fakenanelo"
+	"github.com/madshermansen/terraform-provider-nanelo/internal/client"
+	"github.com/madshermansen/terraform-provider-nanelo/internal/fakenanelo"
 )
 
 func TestRecordLifecycle(t *testing.T) {
