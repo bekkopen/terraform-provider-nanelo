@@ -1,0 +1,45 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+      - run: go vet ./...
+      # Runs every test, including the resource tests, against the in-memory fake API.
+      - run: go test -count=1 ./...
+      - name: Generated docs are up to date
+        run: go generate ./... && git diff --exit-code
+
+  acceptance:
+    # Against the real API; needs the NANELO_API_KEY secret and, for team keys, NANELO_TEST_ZONE.
+    if: github.event_name == 'push'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+      - run: go test -count=1 -v -timeout 30m ./internal/provider/
+        env:
+          TF_ACC: "1"
+          NANELO_API_KEY: ${{ secrets.NANELO_API_KEY }}
+          NANELO_TEST_ZONE: ${{ vars.NANELO_TEST_ZONE }}
