@@ -16,7 +16,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/madshermansen/terraform-provider-nanelo/internal/client"
+	"github.com/bekkopen/terraform-provider-nanelo/internal/client"
 )
 
 type Server struct {
