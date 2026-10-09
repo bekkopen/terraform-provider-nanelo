@@ -29,8 +29,15 @@ checksum:
   algorithm: sha256
 signs:
   - artifacts: checksum
+    # Hand gpg the passphrase directly. Relying on the agent's preset passphrase made gpg fall
+    # back to prompting on a terminal CI doesn't have; this way a wrong passphrase fails clearly.
+    stdin: "{{ .Env.GPG_PASSPHRASE }}"
     args:
       - "--batch"
+      - "--pinentry-mode"
+      - "loopback"
+      - "--passphrase-fd"
+      - "0"
       - "--local-user"
       - "{{ .Env.GPG_FINGERPRINT }}"
       - "--output"
