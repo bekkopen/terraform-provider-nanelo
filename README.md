@@ -2,6 +2,8 @@
 
 Manages DNS records in [Nanelo](https://nanelo.com) through its [API](https://nanelo.com/docs).
 
+This is an unofficial, community-maintained provider. It is not affiliated with or supported by Nanelo.
+
 ```hcl
 provider "nanelo" {} # NANELO_API_KEY; the zone is looked up for domain-bound keys
 

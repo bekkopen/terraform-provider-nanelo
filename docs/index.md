@@ -15,7 +15,7 @@ Manages DNS records in [Nanelo](https://nanelo.com).
 terraform {
   required_providers {
     nanelo = {
-      source = "bekk/nanelo"
+      source = "madshermansen/nanelo"
     }
   }
 }

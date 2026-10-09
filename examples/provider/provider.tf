@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     nanelo = {
-      source = "bekk/nanelo"
+      source = "madshermansen/nanelo"
     }
   }
 }
