@@ -12,11 +12,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
         with:
           terraform_wrapper: false
       - run: go vet ./...
@@ -24,18 +26,24 @@ jobs:
       - run: go test -count=1 ./...
       - name: Generated docs are up to date
         run: go generate ./... && git diff --exit-code
+      - name: No known vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
   acceptance:
-    # Against the real API; needs the NANELO_API_KEY secret and, for team keys, NANELO_TEST_ZONE.
+    # Against the real API. Never runs for pull requests, so code from a PR cannot reach the key.
+    # NANELO_API_KEY lives in the "acceptance" environment; use a key for a throwaway zone.
     if: github.event_name == 'push'
     needs: test
     runs-on: ubuntu-latest
+    environment: acceptance
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
         with:
           terraform_wrapper: false
       - run: go test -count=1 -v -timeout 30m ./internal/provider/

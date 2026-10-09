@@ -1,3 +1,21 @@
+# Secrets
 .env
+.env.*
+
+# Terraform files from manual testing; state and tfvars can contain secrets
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+.terraformrc
+terraform.rc
+
+# Build output
 /terraform-provider-nanelo
 dist/
+
+# Local Claude Code settings
+.claude/settings.local.json

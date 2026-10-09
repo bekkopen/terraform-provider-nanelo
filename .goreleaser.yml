@@ -1,4 +1,6 @@
 version: 2
+# Explicit, so release asset names never depend on the checkout directory name.
+project_name: terraform-provider-nanelo
 before:
   hooks:
     - go mod tidy
